@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A Little Surprise 💗</title>
 
   <style>
@@ -15,6 +15,7 @@
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       overflow: hidden;
       display: flex;
       justify-content: center;
@@ -24,7 +25,6 @@
       position: relative;
     }
 
-    /* Soft pink glow */
     body::before {
       content: "";
       position: fixed;
@@ -37,7 +37,7 @@
       pointer-events: none;
     }
 
-    /* Center message card */
+    /* Birthday message card */
     .card {
       position: relative;
       z-index: 5;
@@ -69,15 +69,16 @@
       color: #383238;
     }
 
-    /* Clickable final line */
+    /* Clickable last line */
     .surprise {
       margin-top: 4px;
       display: inline-block;
       color: #d81b60;
       cursor: pointer;
-      transition: transform .25s, color .25s;
       text-decoration: none;
       border-radius: 8px;
+      transition: transform .25s, color .25s;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .surprise:hover {
@@ -98,7 +99,7 @@
       opacity: .8;
     }
 
-    /* Floating decorations */
+    /* Floating hearts, chocolates and sparkles */
     .floaty {
       position: fixed;
       bottom: -70px;
@@ -117,15 +118,19 @@
         transform: translate3d(0, 0, 0) rotate(0deg);
         opacity: 0;
       }
+
       10% {
         opacity: .85;
       }
+
       50% {
         transform: translate3d(28px, -55vh, 0) rotate(18deg);
       }
+
       90% {
         opacity: .75;
       }
+
       100% {
         transform: translate3d(-20px, -115vh, 0) rotate(-20deg);
         opacity: 0;
@@ -137,13 +142,13 @@
         opacity: 0;
         transform: translateY(20px) scale(.95);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
       }
     }
 
-    /* Small screens */
     @media (max-width: 480px) {
       .card {
         padding: 32px 15px;
@@ -154,7 +159,6 @@
       }
     }
 
-    /* Respect reduced motion preferences */
     @media (prefers-reduced-motion: reduce) {
       .floaty {
         animation-duration: 20s;
@@ -165,13 +169,16 @@
 
 <body>
 
-  <!-- Floating hearts, chocolates and sparkles -->
+  <!-- Floating decorations -->
   <div id="floating-layer" aria-hidden="true"></div>
 
-  <!-- Birthday message -->
+  <!-- Main birthday card -->
   <main class="card">
+
     <div class="line pink">Dil ka hai sweet 🌹</div>
+
     <div class="line orange">Style tera heat 🔥</div>
+
     <div class="line dark">Happy 25th birthday,</div>
 
     <div class="line">
@@ -179,15 +186,26 @@
         href="#"
         class="surprise"
         id="surpriseLink"
-        aria-label="Reveal a surprise message"
+        aria-label="Toggle surprise message"
       >my heartbeat 💗</a>
     </div>
 
     <p class="hint">♡ MADE WITH LOVE ♡</p>
+
   </main>
 
   <script>
-    // Customize the floating decorations here.
+    // ========================================
+    // CUSTOMIZE YOUR TWO MESSAGES HERE
+    // ========================================
+
+    const originalMessage = "my heartbeat 💗";
+    const surpriseMessage = "xyz 💖";
+
+    // ========================================
+    // FLOATING HEARTS AND CHOCOLATES
+    // ========================================
+
     const decorations = [
       "💗", "💕", "💖", "❤️", "🩷",
       "🍫", "🍬", "🍫", "💝", "✨", "🌸"
@@ -195,42 +213,75 @@
 
     const layer = document.getElementById("floating-layer");
 
-    // Create a continuous stream of floating objects.
     for (let i = 0; i < 32; i++) {
       const item = document.createElement("span");
 
       item.className = "floaty";
+
       item.textContent =
         decorations[Math.floor(Math.random() * decorations.length)];
 
-      item.style.setProperty("--left", Math.random() * 100 + "vw");
-      item.style.setProperty("--size", (18 + Math.random() * 26) + "px");
-      item.style.setProperty("--duration", (9 + Math.random() * 11) + "s");
-      item.style.setProperty("--delay", (-Math.random() * 20) + "s");
+      item.style.setProperty(
+        "--left",
+        Math.random() * 100 + "vw"
+      );
+
+      item.style.setProperty(
+        "--size",
+        (18 + Math.random() * 26) + "px"
+      );
+
+      item.style.setProperty(
+        "--duration",
+        (9 + Math.random() * 11) + "s"
+      );
+
+      item.style.setProperty(
+        "--delay",
+        (-Math.random() * 20) + "s"
+      );
 
       layer.appendChild(item);
     }
 
-    // CHANGE THIS to the message you want your friend to see.
-    const surpriseMessage = "xyz 💖";
+    // ========================================
+    // TOGGLE MESSAGE ON EVERY CLICK
+    // ========================================
 
     const surpriseLink = document.getElementById("surpriseLink");
 
-    surpriseLink.addEventListener("click", function (event) {
+    // Start with the original message
+    surpriseLink.textContent = originalMessage;
+
+    surpriseLink.addEventListener("click", function(event) {
       event.preventDefault();
 
-      surpriseLink.textContent = surpriseMessage;
+      // Switch to the other message every time
+      if (surpriseLink.textContent === originalMessage) {
+        surpriseLink.textContent = surpriseMessage;
+      } else {
+        surpriseLink.textContent = originalMessage;
+      }
+
+      // Small visual effect
       surpriseLink.style.color = "#ff4081";
       surpriseLink.style.transform = "scale(1.08)";
 
-      // A little burst of hearts on click
+      // Return to normal size
+      setTimeout(() => {
+        surpriseLink.style.transform = "scale(1)";
+      }, 250);
+
+      // Create a little heart burst
       for (let i = 0; i < 12; i++) {
         const heart = document.createElement("span");
 
         heart.className = "floaty";
         heart.textContent = ["💗", "💖", "💕", "✨"][i % 4];
+
         heart.style.left = (35 + Math.random() * 30) + "vw";
         heart.style.bottom = "45%";
+
         heart.style.setProperty("--left", "0px");
         heart.style.setProperty("--size", "24px");
         heart.style.setProperty("--duration", "2s");
@@ -238,8 +289,9 @@
 
         layer.appendChild(heart);
 
-        // Remove burst decorations after animation
-        setTimeout(() => heart.remove(), 2200);
+        setTimeout(() => {
+          heart.remove();
+        }, 2200);
       }
     });
   </script>
