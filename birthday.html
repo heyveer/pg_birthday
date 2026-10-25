@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Little Surprise 💗</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe3ed, #ffc8dd, #ffe8ef);
+      position: relative;
+    }
+
+    /* Soft pink glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%,
+          rgba(255,255,255,.5), transparent 35%),
+        radial-gradient(circle at 80% 80%,
+          rgba(255,100,160,.15), transparent 40%);
+      pointer-events: none;
+    }
+
+    /* Center message card */
+    .card {
+      position: relative;
+      z-index: 5;
+      width: min(90%, 405px);
+      padding: 38px 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.83);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 22px;
+      box-shadow: 0 15px 40px rgba(205, 73, 125, .17);
+      animation: appear 1.2s ease both;
+    }
+
+    .line {
+      font-size: clamp(21px, 5vw, 26px);
+      line-height: 1.55;
+      font-weight: 800;
+    }
+
+    .pink {
+      color: #e91e63;
+    }
+
+    .orange {
+      color: #ef795d;
+    }
+
+    .dark {
+      color: #383238;
+    }
+
+    /* Clickable final line */
+    .surprise {
+      margin-top: 4px;
+      display: inline-block;
+      color: #d81b60;
+      cursor: pointer;
+      transition: transform .25s, color .25s;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    .surprise:hover {
+      transform: scale(1.06);
+      color: #ff4081;
+    }
+
+    .surprise:focus-visible {
+      outline: 2px solid #d81b60;
+      outline-offset: 5px;
+    }
+
+    .hint {
+      margin-top: 16px;
+      color: #c77997;
+      font-size: 11px;
+      letter-spacing: 1px;
+      opacity: .8;
+    }
+
+    /* Floating decorations */
+    .floaty {
+      position: fixed;
+      bottom: -70px;
+      left: var(--left);
+      font-size: var(--size);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+      animation: floatUp var(--duration) linear var(--delay) infinite;
+      filter: drop-shadow(0 4px 5px rgba(190, 70, 120, .12));
+      will-change: transform, opacity;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: .85;
+      }
+      50% {
+        transform: translate3d(28px, -55vh, 0) rotate(18deg);
+      }
+      90% {
+        opacity: .75;
+      }
+      100% {
+        transform: translate3d(-20px, -115vh, 0) rotate(-20deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      .card {
+        padding: 32px 15px;
+      }
+
+      .line {
+        line-height: 1.65;
+      }
+    }
+
+    /* Respect reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      .floaty {
+        animation-duration: 20s;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Floating hearts, chocolates and sparkles -->
+  <div id="floating-layer" aria-hidden="true"></div>
+
+  <!-- Birthday message -->
+  <main class="card">
+    <div class="line pink">Dil ka hai sweet 🌹</div>
+    <div class="line orange">Style tera heat 🔥</div>
+    <div class="line dark">Happy 25th birthday,</div>
+
+    <div class="line">
+      <a
+        href="#"
+        class="surprise"
+        id="surpriseLink"
+        aria-label="Reveal a surprise message"
+      >my heartbeat 💗</a>
+    </div>
+
+    <p class="hint">♡ MADE WITH LOVE ♡</p>
+  </main>
+
+  <script>
+    // Customize the floating decorations here.
+    const decorations = [
+      "💗", "💕", "💖", "❤️", "🩷",
+      "🍫", "🍬", "🍫", "💝", "✨", "🌸"
+    ];
+
+    const layer = document.getElementById("floating-layer");
+
+    // Create a continuous stream of floating objects.
+    for (let i = 0; i < 32; i++) {
+      const item = document.createElement("span");
+
+      item.className = "floaty";
+      item.textContent =
+        decorations[Math.floor(Math.random() * decorations.length)];
+
+      item.style.setProperty("--left", Math.random() * 100 + "vw");
+      item.style.setProperty("--size", (18 + Math.random() * 26) + "px");
+      item.style.setProperty("--duration", (9 + Math.random() * 11) + "s");
+      item.style.setProperty("--delay", (-Math.random() * 20) + "s");
+
+      layer.appendChild(item);
+    }
+
+    // CHANGE THIS to the message you want your friend to see.
+    const surpriseMessage = "xyz 💖";
+
+    const surpriseLink = document.getElementById("surpriseLink");
+
+    surpriseLink.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      surpriseLink.textContent = surpriseMessage;
+      surpriseLink.style.color = "#ff4081";
+      surpriseLink.style.transform = "scale(1.08)";
+
+      // A little burst of hearts on click
+      for (let i = 0; i < 12; i++) {
+        const heart = document.createElement("span");
+
+        heart.className = "floaty";
+        heart.textContent = ["💗", "💖", "💕", "✨"][i % 4];
+        heart.style.left = (35 + Math.random() * 30) + "vw";
+        heart.style.bottom = "45%";
+        heart.style.setProperty("--left", "0px");
+        heart.style.setProperty("--size", "24px");
+        heart.style.setProperty("--duration", "2s");
+        heart.style.setProperty("--delay", "0s");
+
+        layer.appendChild(heart);
+
+        // Remove burst decorations after animation
+        setTimeout(() => heart.remove(), 2200);
+      }
+    });
+  </script>
+
+</body>
+</html>
