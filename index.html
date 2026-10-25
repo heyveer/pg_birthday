@@ -234,7 +234,7 @@ button {
     font-weight: bold;
 }
 
-/* Open door animation */
+/* Door opening animation */
 
 #doorScreen.opened .door.left {
     transform: rotateY(-115deg);
@@ -252,7 +252,9 @@ button {
     cursor: default;
 }
 
-/* Door button */
+/* =================================
+   BUTTONS
+================================= */
 
 .primary-btn {
     margin-top: 25px;
@@ -299,25 +301,42 @@ button {
 }
 
 /* =================================
-   MESSAGE SCREEN
+   BIRTHDAY MESSAGE SCREEN
 ================================= */
 
 #messageScreen {
-    overflow-y: auto;
+    overflow: auto;
     justify-content: center;
 }
 
+/*
+   CARD BACKGROUND:
+   The card grows to fit its content.
+   Its maximum width follows the screen.
+*/
+
 .message-card {
     position: relative;
-    width: min(92%, 440px);
-    padding: 30px 22px;
-    border-radius: 28px;
-    background: rgba(255,255,255,.88);
-    border: 1px solid rgba(255,255,255,.9);
+
+    width: max-content;
+    max-width: calc(100vw - 32px);
+
+    padding: 30px 28px;
+
+    border-radius: 32px;
+
+    background: rgba(255,255,255,.96);
+
+    border: 1px solid rgba(255,255,255,.98);
+
     box-shadow: 0 20px 60px rgba(194,62,116,.2);
+
     backdrop-filter: blur(8px);
+
     animation: cardAppear .9s ease both;
 }
+
+/* Penguins */
 
 .top-penguins {
     font-size: 48px;
@@ -332,25 +351,43 @@ button {
     margin-bottom: 20px;
 }
 
+/* Message container */
+
 .message-lines {
     min-height: 150px;
+
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
+
     gap: 9px;
 }
+
+/*
+   EACH MESSAGE STAYS ON ONE LINE.
+   Emojis stay on the same line as the text.
+*/
 
 .message-line {
     width: max-content;
     max-width: none;
+
     white-space: nowrap;
-    font-size: clamp(11px, 3.7vw, 25px);
+
+    font-size: clamp(12px, 2.5vw, 27px);
+
     line-height: 1.5;
     font-weight: 800;
+
     opacity: 0;
+
     transform: translateY(12px) scale(.96);
+
     animation: lineReveal .7s ease forwards;
 }
+
+/* Message colors */
 
 .pink {
     color: #e91e63;
@@ -368,6 +405,8 @@ button {
     color: #45313b;
 }
 
+/* Progress */
+
 #nextBtn {
     margin-top: 25px;
 }
@@ -378,6 +417,8 @@ button {
     margin-top: 14px;
     letter-spacing: 1px;
 }
+
+/* Final message */
 
 #finalMessage {
     display: none;
@@ -391,6 +432,10 @@ button {
 #finalMessage.visible {
     display: block;
 }
+
+/* =================================
+   ANIMATIONS
+================================= */
 
 @keyframes lineReveal {
     to {
@@ -449,15 +494,21 @@ button {
 
     100% {
         opacity: 0;
-        transform: translate(var(--x),var(--y)) scale(1.5) rotate(25deg);
+        transform:
+            translate(var(--x), var(--y))
+            scale(1.5)
+            rotate(25deg);
     }
 }
 
-/* Mobile */
+/* =================================
+   RESPONSIVE DESIGN
+================================= */
 
 @media (max-width: 480px) {
+
     .screen {
-        padding: 15px;
+        padding: 10px;
     }
 
     .door-frame {
@@ -467,17 +518,40 @@ button {
     }
 
     .message-card {
-        padding: 26px 16px;
+        width: max-content;
+        max-width: calc(100vw - 20px);
+
+        padding: 24px 8px;
+        border-radius: 24px;
     }
 
     .message-lines {
         min-height: 145px;
     }
 
+    .message-line {
+        font-size: clamp(10px, 2.7vw, 15px);
+    }
+
     .door-subtitle {
         font-size: 11px;
     }
+
+    .top-penguins {
+        font-size: 42px;
+    }
+
+    .message-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+
+    #finalMessage {
+        font-size: 12px;
+    }
 }
+
+/* Accessibility */
 
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -497,36 +571,53 @@ button {
 
 <body>
 
-<!-- Floating decorations -->
+<!-- Floating hearts, chocolates and penguins -->
+
 <div id="floating-layer" aria-hidden="true"></div>
+
 
 <!-- =================================
      SCREEN 1: CLOSED DOORS
-================================== -->
+================================= -->
 
 <section class="screen" id="doorScreen">
 
-    <h1 class="door-heading">A Little Surprise 💗</h1>
+    <h1 class="door-heading">
+        A Little Surprise 💗
+    </h1>
 
     <div class="door-frame" id="doorFrame">
 
-        <!-- What is visible after the doors open -->
+        <!-- Content behind the doors -->
+
         <div class="door-inside">
             <div class="penguins">🐧💗🐧</div>
+
             <p>Someone special is waiting!</p>
-            <div style="font-size:35px">🍫 💝 🍫</div>
+
+            <div style="font-size:35px">
+                🍫 💝 🍫
+            </div>
         </div>
 
         <!-- Left door -->
-        <button class="door left" id="leftDoor"
-                aria-label="Open the left door">
+
+        <button
+            class="door left"
+            id="leftDoor"
+            aria-label="Open the left door"
+        >
             <span class="door-emoji">🐧💗</span>
             <span class="door-knob"></span>
         </button>
 
         <!-- Right door -->
-        <button class="door right" id="rightDoor"
-                aria-label="Open the right door">
+
+        <button
+            class="door right"
+            id="rightDoor"
+            aria-label="Open the right door"
+        >
             <span class="door-emoji">🐧🍫</span>
             <span class="door-knob"></span>
         </button>
@@ -538,7 +629,7 @@ button {
     </p>
 
     <button class="primary-btn" id="enterBtn">
-        Open Surprise 💌
+        Open My Surprise 💌
     </button>
 
 </section>
@@ -546,25 +637,31 @@ button {
 
 <!-- =================================
      SCREEN 2: BIRTHDAY MESSAGE
-================================== -->
+================================= -->
 
 <section class="screen hidden" id="messageScreen">
 
     <main class="message-card">
 
-        <div class="top-penguins">🐧 💗 🐧</div>
+        <div class="top-penguins">
+            🐧 💗 🐧
+        </div>
 
-        <p class="message-label">A LITTLE MESSAGE FOR YOU</p>
+        <p class="message-label">
+            A LITTLE MESSAGE FOR YOU
+        </p>
 
         <div class="message-lines" id="messageLines">
-            <!-- Lines appear here one by one -->
+            <!-- Birthday lines appear here -->
         </div>
 
         <button class="primary-btn" id="nextBtn">
             Tap for the next line 💗
         </button>
 
-        <p id="progress">0 / 4 LINES REVEALED</p>
+        <p id="progress">
+            0 / 4 LINES REVEALED
+        </p>
 
         <div id="finalMessage">
             🐧 Sending you the biggest penguin hug! 🐧
@@ -578,41 +675,38 @@ button {
 
 
 <script>
+
 /* ==========================================
    CUSTOMIZE YOUR BIRTHDAY MESSAGE HERE
 ========================================== */
 
 const birthdayLines = [
+
     {
-        text: "Thodi si sweet, thodi hai salty 🍭💗",
+        text: "Thodi si sweet, thodi hai salty 🍭 💗",
         className: "pink"
     },
+
     {
-        text: "Beauty toh hai, but brain thoda faulty 😂💕",
+        text: "Beauty toh hai, but brain thoda faulty 😂 💕",
         className: "orange"
     },
+
     {
-        text: "Ladki jise sabse pyaari hai apni duty 🧠✨",
+        text: "Ladki jise sabse pyaari hai apni duty 🧠 ✨",
         className: "dark"
     },
+
     {
-        text: "Happiest 25th Birthday Penguin cutieee 🎂💖",
+        text: "Happiest 25th Birthday Penguin cutieee 🎂 💖",
         className: "purple"
     }
+
 ];
-
-/*
-HOW THE REVEAL WORKS:
-
-First click  -> Dil ka hai sweet 🌹
-Second click -> First line + Style tera heat 🔥
-Third click  -> Previous lines + Happy 25th Birthday
-Fourth click -> All four lines appear
-*/
 
 
 /* ==========================================
-   FLOATING HEARTS AND CHOCOLATES
+   FLOATING DECORATIONS
 ========================================== */
 
 const decorations = [
@@ -621,7 +715,8 @@ const decorations = [
     "🐧", "💞"
 ];
 
-const floatingLayer = document.getElementById("floating-layer");
+const floatingLayer =
+    document.getElementById("floating-layer");
 
 for (let i = 0; i < 32; i++) {
 
@@ -630,27 +725,55 @@ for (let i = 0; i < 32; i++) {
     item.className = "floaty";
 
     item.textContent =
-        decorations[Math.floor(Math.random() * decorations.length)];
+        decorations[
+            Math.floor(Math.random() * decorations.length)
+        ];
 
-    item.style.setProperty("--left", Math.random() * 100 + "vw");
-    item.style.setProperty("--size", (18 + Math.random() * 24) + "px");
-    item.style.setProperty("--duration", (9 + Math.random() * 12) + "s");
-    item.style.setProperty("--delay", (-Math.random() * 20) + "s");
+    item.style.setProperty(
+        "--left",
+        Math.random() * 100 + "vw"
+    );
+
+    item.style.setProperty(
+        "--size",
+        (18 + Math.random() * 24) + "px"
+    );
+
+    item.style.setProperty(
+        "--duration",
+        (9 + Math.random() * 12) + "s"
+    );
+
+    item.style.setProperty(
+        "--delay",
+        (-Math.random() * 20) + "s"
+    );
 
     floatingLayer.appendChild(item);
 }
 
 
 /* ==========================================
-   SCREEN 1: OPEN THE DOORS
+   OPEN THE DOORS
 ========================================== */
 
-const doorScreen = document.getElementById("doorScreen");
-const doorFrame = document.getElementById("doorFrame");
-const leftDoor = document.getElementById("leftDoor");
-const rightDoor = document.getElementById("rightDoor");
-const doorHint = document.getElementById("doorHint");
-const enterBtn = document.getElementById("enterBtn");
+const doorScreen =
+    document.getElementById("doorScreen");
+
+const doorFrame =
+    document.getElementById("doorFrame");
+
+const leftDoor =
+    document.getElementById("leftDoor");
+
+const rightDoor =
+    document.getElementById("rightDoor");
+
+const doorHint =
+    document.getElementById("doorHint");
+
+const enterBtn =
+    document.getElementById("enterBtn");
 
 let doorsOpened = false;
 
@@ -661,87 +784,130 @@ function openDoors() {
     doorsOpened = true;
 
     doorScreen.classList.add("opened");
+
     doorFrame.classList.add("opened-frame");
 
     doorHint.textContent = "SURPRISE! 💗🐧🍫";
 
-    leftDoor.setAttribute("aria-label", "Left door opened");
-    rightDoor.setAttribute("aria-label", "Right door opened");
+    leftDoor.setAttribute(
+        "aria-label",
+        "Left door opened"
+    );
 
-    // Reveal the next button after the door animation
+    rightDoor.setAttribute(
+        "aria-label",
+        "Right door opened"
+    );
+
+    // Show the next button after the doors open.
+
     setTimeout(() => {
+
         enterBtn.classList.add("visible");
-        createHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+
+        createHeartBurst(
+            window.innerWidth / 2,
+            window.innerHeight / 2
+        );
+
     }, 1100);
 }
 
 leftDoor.addEventListener("click", openDoors);
+
 rightDoor.addEventListener("click", openDoors);
 
 
 /* ==========================================
-   SCREEN 1 -> SCREEN 2
+   MOVE TO THE BIRTHDAY MESSAGE
 ========================================== */
 
-const messageScreen = document.getElementById("messageScreen");
+const messageScreen =
+    document.getElementById("messageScreen");
+
+const messageLines =
+    document.getElementById("messageLines");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const progress =
+    document.getElementById("progress");
+
+const finalMessage =
+    document.getElementById("finalMessage");
+
+let revealedLines = 0;
 
 enterBtn.addEventListener("click", () => {
 
     doorScreen.classList.add("hidden");
+
     messageScreen.classList.remove("hidden");
 
-    // Start with a clean message
     revealedLines = 0;
+
     messageLines.innerHTML = "";
+
+    finalMessage.classList.remove("visible");
+
+    nextBtn.textContent = "Tap for the next line 💗";
 
     updateProgress();
 
-    // A little celebration when entering
     setTimeout(() => {
-        createHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+
+        createHeartBurst(
+            window.innerWidth / 2,
+            window.innerHeight / 2
+        );
+
     }, 300);
 });
 
 
 /* ==========================================
-   REVEAL ONE LINE WITH EVERY CLICK
+   REVEAL ONE LINE PER CLICK
 ========================================== */
 
-const messageLines = document.getElementById("messageLines");
-const nextBtn = document.getElementById("nextBtn");
-const progress = document.getElementById("progress");
-const finalMessage = document.getElementById("finalMessage");
-
-let revealedLines = 0;
-
 function updateProgress() {
+
     progress.textContent =
-        revealedLines + " / " + birthdayLines.length + " LINES REVEALED";
+        revealedLines +
+        " / " +
+        birthdayLines.length +
+        " LINES REVEALED";
 }
 
 function revealNextLine() {
 
-    // Do not reveal more lines than available
+    // Restart the message after all lines are shown.
+
     if (revealedLines >= birthdayLines.length) {
 
-        // Optional restart after all lines are shown
         revealedLines = 0;
+
         messageLines.innerHTML = "";
+
         finalMessage.classList.remove("visible");
 
-        nextBtn.textContent = "Read it again 💗";
+        nextBtn.textContent =
+            "Tap for the next line 💗";
 
         updateProgress();
 
         return;
     }
 
-    // Get the next message
+    // Get the next message.
+
     const line = birthdayLines[revealedLines];
 
     const element = document.createElement("div");
 
-    element.className = "message-line " + line.className;
+    element.className =
+        "message-line " + line.className;
+
     element.textContent = line.text;
 
     messageLines.appendChild(element);
@@ -750,7 +916,8 @@ function revealNextLine() {
 
     updateProgress();
 
-    // Small heart animation around the message
+    // Create a heart burst.
+
     createHeartBurst(
         window.innerWidth / 2,
         window.innerHeight / 2
@@ -758,15 +925,18 @@ function revealNextLine() {
 
     if (revealedLines < birthdayLines.length) {
 
-        nextBtn.textContent = "One more thing... 💌";
+        nextBtn.textContent =
+            "One more thing... 💌";
 
     } else {
 
-        nextBtn.textContent = "Read it again 💗";
+        nextBtn.textContent =
+            "Read it again 💗";
 
-        // Show the ending after the last line
         setTimeout(() => {
+
             finalMessage.classList.add("visible");
+
         }, 500);
     }
 }
@@ -780,7 +950,9 @@ nextBtn.addEventListener("click", revealNextLine);
 
 function createHeartBurst(x, y) {
 
-    const burstEmojis = ["💗", "💖", "💕", "✨", "💝", "🐧"];
+    const burstEmojis = [
+        "💗", "💖", "💕", "✨", "💝", "🐧"
+    ];
 
     for (let i = 0; i < 12; i++) {
 
@@ -789,9 +961,12 @@ function createHeartBurst(x, y) {
         heart.className = "burst-heart";
 
         heart.textContent =
-            burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
+            burstEmojis[
+                Math.floor(Math.random() * burstEmojis.length)
+            ];
 
         heart.style.left = x + "px";
+
         heart.style.top = y + "px";
 
         heart.style.setProperty(
@@ -807,12 +982,14 @@ function createHeartBurst(x, y) {
         document.body.appendChild(heart);
 
         setTimeout(() => {
+
             heart.remove();
+
         }, 1000);
     }
 }
+
 </script>
 
 </body>
 </html>
-```
