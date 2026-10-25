@@ -1,300 +1,816 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Little Surprise 💗</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<title>A Little Surprise 💗</title>
 
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe3ed, #ffc8dd, #ffe8ef);
-      position: relative;
-    }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 20% 20%,
-          rgba(255,255,255,.5), transparent 35%),
-        radial-gradient(circle at 80% 80%,
-          rgba(255,100,160,.15), transparent 40%);
-      pointer-events: none;
-    }
+:root {
+    --pink: #ff5c93;
+    --dark-pink: #d81b60;
+    --soft-pink: #ffe0eb;
+    --purple: #9c6ade;
+}
 
-    /* Birthday message card */
-    .card {
-      position: relative;
-      z-index: 5;
-      width: min(90%, 405px);
-      padding: 38px 20px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.83);
-      border: 1px solid rgba(255,255,255,.8);
-      border-radius: 22px;
-      box-shadow: 0 15px 40px rgba(205, 73, 125, .17);
-      animation: appear 1.2s ease both;
-    }
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(135deg, #ffe6ef, #ffc4d9, #fff0f5);
+    color: #45313b;
+}
 
-    .line {
-      font-size: clamp(21px, 5vw, 26px);
-      line-height: 1.55;
-      font-weight: 800;
-    }
+button {
+    font-family: inherit;
+}
 
-    .pink {
-      color: #e91e63;
-    }
+/* =================================
+   FLOATING BACKGROUND DECORATIONS
+================================= */
 
-    .orange {
-      color: #ef795d;
-    }
+#floating-layer {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
 
-    .dark {
-      color: #383238;
-    }
+.floaty {
+    position: absolute;
+    left: var(--left);
+    bottom: -60px;
+    font-size: var(--size);
+    animation: floatUp var(--duration) linear var(--delay) infinite;
+    opacity: 0;
+    will-change: transform, opacity;
+}
 
-    /* Clickable last line */
-    .surprise {
-      margin-top: 4px;
-      display: inline-block;
-      color: #d81b60;
-      cursor: pointer;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: transform .25s, color .25s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .surprise:hover {
-      transform: scale(1.06);
-      color: #ff4081;
-    }
-
-    .surprise:focus-visible {
-      outline: 2px solid #d81b60;
-      outline-offset: 5px;
-    }
-
-    .hint {
-      margin-top: 16px;
-      color: #c77997;
-      font-size: 11px;
-      letter-spacing: 1px;
-      opacity: .8;
-    }
-
-    /* Floating hearts, chocolates and sparkles */
-    .floaty {
-      position: fixed;
-      bottom: -70px;
-      left: var(--left);
-      font-size: var(--size);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 1;
-      animation: floatUp var(--duration) linear var(--delay) infinite;
-      filter: drop-shadow(0 4px 5px rgba(190, 70, 120, .12));
-      will-change: transform, opacity;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translate3d(0, 0, 0) rotate(0deg);
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg);
         opacity: 0;
-      }
+    }
 
-      10% {
-        opacity: .85;
-      }
+    12% {
+        opacity: .8;
+    }
 
-      50% {
-        transform: translate3d(28px, -55vh, 0) rotate(18deg);
-      }
-
-      90% {
+    85% {
         opacity: .75;
-      }
-
-      100% {
-        transform: translate3d(-20px, -115vh, 0) rotate(-20deg);
-        opacity: 0;
-      }
     }
 
-    @keyframes appear {
-      from {
+    100% {
+        transform: translateY(-120vh) rotate(35deg);
         opacity: 0;
-        transform: translateY(20px) scale(.95);
-      }
+    }
+}
 
-      to {
+/* =================================
+   SCREENS
+================================= */
+
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    z-index: 3;
+    transition: opacity .7s ease, visibility .7s ease;
+}
+
+.screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* =================================
+   DOOR SCREEN
+================================= */
+
+#doorScreen {
+    perspective: 1400px;
+}
+
+.door-heading {
+    margin-bottom: 25px;
+    color: #c52b68;
+    font-size: clamp(24px, 5vw, 36px);
+    text-shadow: 0 3px 10px #ffffff;
+    animation: softPulse 2s ease-in-out infinite;
+}
+
+.door-subtitle {
+    margin-top: 20px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #a64b70;
+}
+
+.door-frame {
+    position: relative;
+    width: min(88vw, 370px);
+    height: min(58vh, 440px);
+    min-height: 300px;
+    display: flex;
+    border: 8px solid #f8b4ce;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #fff6fa, #ffd9e8);
+    box-shadow:
+        0 0 0 5px rgba(255,255,255,.6),
+        0 20px 50px rgba(194,62,116,.25);
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+/* Door panels */
+
+.door {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: linear-gradient(135deg, #ffb2cd, #f47ba9);
+    border: 3px solid #ffe6ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 1.5s cubic-bezier(.68,-0.15,.25,1.2);
+    z-index: 5;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.door.left {
+    left: 0;
+    transform-origin: left center;
+    border-radius: 8px 0 0 8px;
+}
+
+.door.right {
+    right: 0;
+    transform-origin: right center;
+    border-radius: 0 8px 8px 0;
+}
+
+.door::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 2px solid rgba(255,255,255,.65);
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.door-knob {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffe8a3;
+    border: 2px solid #d69c53;
+    box-shadow: 0 0 10px rgba(255,255,255,.8);
+}
+
+.left .door-knob {
+    right: 12px;
+}
+
+.right .door-knob {
+    left: 12px;
+}
+
+.door-emoji {
+    font-size: clamp(38px, 9vw, 62px);
+    animation: bob 2s ease-in-out infinite;
+}
+
+.door.left .door-emoji {
+    transform: rotate(-8deg);
+}
+
+.door.right .door-emoji {
+    transform: rotate(8deg);
+}
+
+/* Inside the doors */
+
+.door-inside {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    background: linear-gradient(135deg, #fff8fb, #ffd9e8);
+    z-index: 1;
+}
+
+.door-inside .penguins {
+    font-size: clamp(55px, 12vw, 90px);
+    animation: bob 2s ease-in-out infinite;
+}
+
+.door-inside p {
+    font-size: 14px;
+    color: #c52b68;
+    font-weight: bold;
+}
+
+/* Open door animation */
+
+#doorScreen.opened .door.left {
+    transform: rotateY(-115deg);
+}
+
+#doorScreen.opened .door.right {
+    transform: rotateY(115deg);
+}
+
+.door-frame.opened-frame {
+    overflow: visible;
+}
+
+.door-frame.opened-frame .door {
+    cursor: default;
+}
+
+/* Door button */
+
+.primary-btn {
+    margin-top: 25px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ff5c93, #e91e63);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: .5px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(216,27,96,.25);
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    z-index: 10;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 25px rgba(216,27,96,.35);
+}
+
+.primary-btn:active {
+    transform: scale(.97);
+}
+
+.primary-btn:focus-visible {
+    outline: 3px solid #a5164c;
+    outline-offset: 4px;
+}
+
+#enterBtn {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity .5s, visibility .5s, transform .5s;
+}
+
+#enterBtn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* =================================
+   MESSAGE SCREEN
+================================= */
+
+#messageScreen {
+    overflow-y: auto;
+    justify-content: center;
+}
+
+.message-card {
+    position: relative;
+    width: min(92%, 440px);
+    padding: 30px 22px;
+    border-radius: 28px;
+    background: rgba(255,255,255,.88);
+    border: 1px solid rgba(255,255,255,.9);
+    box-shadow: 0 20px 60px rgba(194,62,116,.2);
+    backdrop-filter: blur(8px);
+    animation: cardAppear .9s ease both;
+}
+
+.top-penguins {
+    font-size: 48px;
+    margin-bottom: 12px;
+    animation: bob 2.5s ease-in-out infinite;
+}
+
+.message-label {
+    font-size: 11px;
+    color: #c77997;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.message-lines {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 9px;
+}
+
+.message-line {
+    font-size: clamp(20px, 5vw, 27px);
+    line-height: 1.5;
+    font-weight: 800;
+    opacity: 0;
+    transform: translateY(12px) scale(.96);
+    animation: lineReveal .7s ease forwards;
+}
+
+.pink {
+    color: #e91e63;
+}
+
+.orange {
+    color: #ef795d;
+}
+
+.purple {
+    color: #9c6ade;
+}
+
+.dark {
+    color: #45313b;
+}
+
+#nextBtn {
+    margin-top: 25px;
+}
+
+#progress {
+    font-size: 11px;
+    color: #c77997;
+    margin-top: 14px;
+    letter-spacing: 1px;
+}
+
+#finalMessage {
+    display: none;
+    margin-top: 16px;
+    color: #d81b60;
+    font-size: 15px;
+    line-height: 1.7;
+    animation: lineReveal .8s ease both;
+}
+
+#finalMessage.visible {
+    display: block;
+}
+
+@keyframes lineReveal {
+    to {
         opacity: 1;
         transform: translateY(0) scale(1);
-      }
+    }
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(.94);
     }
 
-    @media (max-width: 480px) {
-      .card {
-        padding: 32px 15px;
-      }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
 
-      .line {
-        line-height: 1.65;
-      }
+@keyframes bob {
+    0%, 100% {
+        transform: translateY(0);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .floaty {
-        animation-duration: 20s;
-      }
+    50% {
+        transform: translateY(-8px);
     }
-  </style>
+}
+
+@keyframes softPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.025);
+    }
+}
+
+/* Heart burst */
+
+.burst-heart {
+    position: fixed;
+    z-index: 20;
+    pointer-events: none;
+    font-size: 25px;
+    animation: burst .9s ease-out forwards;
+}
+
+@keyframes burst {
+    0% {
+        opacity: 1;
+        transform: translate(0,0) scale(.5);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--x),var(--y)) scale(1.5) rotate(25deg);
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+    .screen {
+        padding: 15px;
+    }
+
+    .door-frame {
+        width: min(86vw, 340px);
+        height: min(53vh, 390px);
+        min-height: 290px;
+    }
+
+    .message-card {
+        padding: 26px 16px;
+    }
+
+    .message-lines {
+        min-height: 145px;
+    }
+
+    .door-subtitle {
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+
+    .door {
+        transition-duration: .2s;
+    }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Floating decorations -->
-  <div id="floating-layer" aria-hidden="true"></div>
+<!-- Floating decorations -->
+<div id="floating-layer" aria-hidden="true"></div>
 
-  <!-- Main birthday card -->
-  <main class="card">
+<!-- =================================
+     SCREEN 1: CLOSED DOORS
+================================== -->
 
-    <div class="line pink">Dil ka hai sweet 🌹</div>
+<section class="screen" id="doorScreen">
 
-    <div class="line orange">Style tera heat 🔥</div>
+    <h1 class="door-heading">A Little Surprise 💗</h1>
 
-    <div class="line dark">Happy 25th birthday,</div>
+    <div class="door-frame" id="doorFrame">
 
-    <div class="line">
-      <a
-        href="#"
-        class="surprise"
-        id="surpriseLink"
-        aria-label="Toggle surprise message"
-      >my heartbeat 💗</a>
+        <!-- What is visible after the doors open -->
+        <div class="door-inside">
+            <div class="penguins">🐧💗🐧</div>
+            <p>Someone special is waiting!</p>
+            <div style="font-size:35px">🍫 💝 🍫</div>
+        </div>
+
+        <!-- Left door -->
+        <button class="door left" id="leftDoor"
+                aria-label="Open the left door">
+            <span class="door-emoji">🐧💗</span>
+            <span class="door-knob"></span>
+        </button>
+
+        <!-- Right door -->
+        <button class="door right" id="rightDoor"
+                aria-label="Open the right door">
+            <span class="door-emoji">🐧🍫</span>
+            <span class="door-knob"></span>
+        </button>
+
     </div>
 
-    <p class="hint">♡ MADE WITH LOVE ♡</p>
+    <p class="door-subtitle" id="doorHint">
+        🚪 TAP THE DOORS TO OPEN YOUR SURPRISE 🚪
+    </p>
 
-  </main>
+    <button class="primary-btn" id="enterBtn">
+        Open My Surprise 💌
+    </button>
 
-  <script>
-    // ========================================
-    // CUSTOMIZE YOUR TWO MESSAGES HERE
-    // ========================================
+</section>
 
-    const originalMessage = "my heartbeat 💗";
-    const surpriseMessage = "xyz 💖";
 
-    // ========================================
-    // FLOATING HEARTS AND CHOCOLATES
-    // ========================================
+<!-- =================================
+     SCREEN 2: BIRTHDAY MESSAGE
+================================== -->
 
-    const decorations = [
-      "💗", "💕", "💖", "❤️", "🩷",
-      "🍫", "🍬", "🍫", "💝", "✨", "🌸"
-    ];
+<section class="screen hidden" id="messageScreen">
 
-    const layer = document.getElementById("floating-layer");
+    <main class="message-card">
 
-    for (let i = 0; i < 32; i++) {
-      const item = document.createElement("span");
+        <div class="top-penguins">🐧 💗 🐧</div>
 
-      item.className = "floaty";
+        <p class="message-label">A LITTLE MESSAGE FOR YOU</p>
 
-      item.textContent =
+        <div class="message-lines" id="messageLines">
+            <!-- Lines appear here one by one -->
+        </div>
+
+        <button class="primary-btn" id="nextBtn">
+            Tap for the next line 💗
+        </button>
+
+        <p id="progress">0 / 4 LINES REVEALED</p>
+
+        <div id="finalMessage">
+            🐧 Sending you the biggest penguin hug! 🐧
+            <br>
+            💗 🍫 💗
+        </div>
+
+    </main>
+
+</section>
+
+
+<script>
+/* ==========================================
+   CUSTOMIZE YOUR BIRTHDAY MESSAGE HERE
+========================================== */
+
+const birthdayLines = [
+    {
+        text: "Dil ka hai sweet 🌹",
+        className: "pink"
+    },
+    {
+        text: "Style tera heat 🔥",
+        className: "orange"
+    },
+    {
+        text: "Happy 25th Birthday, 🎂",
+        className: "dark"
+    },
+    {
+        text: "My Heartbeat 💗🐧",
+        className: "purple"
+    }
+];
+
+/*
+HOW THE REVEAL WORKS:
+
+First click  -> Dil ka hai sweet 🌹
+Second click -> First line + Style tera heat 🔥
+Third click  -> Previous lines + Happy 25th Birthday
+Fourth click -> All four lines appear
+*/
+
+
+/* ==========================================
+   FLOATING HEARTS AND CHOCOLATES
+========================================== */
+
+const decorations = [
+    "💗", "💕", "💖", "❤️", "🩷",
+    "🍫", "🍬", "💝", "✨", "🌸",
+    "🐧", "💞"
+];
+
+const floatingLayer = document.getElementById("floating-layer");
+
+for (let i = 0; i < 32; i++) {
+
+    const item = document.createElement("span");
+
+    item.className = "floaty";
+
+    item.textContent =
         decorations[Math.floor(Math.random() * decorations.length)];
 
-      item.style.setProperty(
-        "--left",
-        Math.random() * 100 + "vw"
-      );
+    item.style.setProperty("--left", Math.random() * 100 + "vw");
+    item.style.setProperty("--size", (18 + Math.random() * 24) + "px");
+    item.style.setProperty("--duration", (9 + Math.random() * 12) + "s");
+    item.style.setProperty("--delay", (-Math.random() * 20) + "s");
 
-      item.style.setProperty(
-        "--size",
-        (18 + Math.random() * 26) + "px"
-      );
+    floatingLayer.appendChild(item);
+}
 
-      item.style.setProperty(
-        "--duration",
-        (9 + Math.random() * 11) + "s"
-      );
 
-      item.style.setProperty(
-        "--delay",
-        (-Math.random() * 20) + "s"
-      );
+/* ==========================================
+   SCREEN 1: OPEN THE DOORS
+========================================== */
 
-      layer.appendChild(item);
+const doorScreen = document.getElementById("doorScreen");
+const doorFrame = document.getElementById("doorFrame");
+const leftDoor = document.getElementById("leftDoor");
+const rightDoor = document.getElementById("rightDoor");
+const doorHint = document.getElementById("doorHint");
+const enterBtn = document.getElementById("enterBtn");
+
+let doorsOpened = false;
+
+function openDoors() {
+
+    if (doorsOpened) return;
+
+    doorsOpened = true;
+
+    doorScreen.classList.add("opened");
+    doorFrame.classList.add("opened-frame");
+
+    doorHint.textContent = "SURPRISE! 💗🐧🍫";
+
+    leftDoor.setAttribute("aria-label", "Left door opened");
+    rightDoor.setAttribute("aria-label", "Right door opened");
+
+    // Reveal the next button after the door animation
+    setTimeout(() => {
+        enterBtn.classList.add("visible");
+        createHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+    }, 1100);
+}
+
+leftDoor.addEventListener("click", openDoors);
+rightDoor.addEventListener("click", openDoors);
+
+
+/* ==========================================
+   SCREEN 1 -> SCREEN 2
+========================================== */
+
+const messageScreen = document.getElementById("messageScreen");
+
+enterBtn.addEventListener("click", () => {
+
+    doorScreen.classList.add("hidden");
+    messageScreen.classList.remove("hidden");
+
+    // Start with a clean message
+    revealedLines = 0;
+    messageLines.innerHTML = "";
+
+    updateProgress();
+
+    // A little celebration when entering
+    setTimeout(() => {
+        createHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+    }, 300);
+});
+
+
+/* ==========================================
+   REVEAL ONE LINE WITH EVERY CLICK
+========================================== */
+
+const messageLines = document.getElementById("messageLines");
+const nextBtn = document.getElementById("nextBtn");
+const progress = document.getElementById("progress");
+const finalMessage = document.getElementById("finalMessage");
+
+let revealedLines = 0;
+
+function updateProgress() {
+    progress.textContent =
+        revealedLines + " / " + birthdayLines.length + " LINES REVEALED";
+}
+
+function revealNextLine() {
+
+    // Do not reveal more lines than available
+    if (revealedLines >= birthdayLines.length) {
+
+        // Optional restart after all lines are shown
+        revealedLines = 0;
+        messageLines.innerHTML = "";
+        finalMessage.classList.remove("visible");
+
+        nextBtn.textContent = "Read it again 💗";
+
+        updateProgress();
+
+        return;
     }
 
-    // ========================================
-    // TOGGLE MESSAGE ON EVERY CLICK
-    // ========================================
+    // Get the next message
+    const line = birthdayLines[revealedLines];
 
-    const surpriseLink = document.getElementById("surpriseLink");
+    const element = document.createElement("div");
 
-    // Start with the original message
-    surpriseLink.textContent = originalMessage;
+    element.className = "message-line " + line.className;
+    element.textContent = line.text;
 
-    surpriseLink.addEventListener("click", function(event) {
-      event.preventDefault();
+    messageLines.appendChild(element);
 
-      // Switch to the other message every time
-      if (surpriseLink.textContent === originalMessage) {
-        surpriseLink.textContent = surpriseMessage;
-      } else {
-        surpriseLink.textContent = originalMessage;
-      }
+    revealedLines++;
 
-      // Small visual effect
-      surpriseLink.style.color = "#ff4081";
-      surpriseLink.style.transform = "scale(1.08)";
+    updateProgress();
 
-      // Return to normal size
-      setTimeout(() => {
-        surpriseLink.style.transform = "scale(1)";
-      }, 250);
+    // Small heart animation around the message
+    createHeartBurst(
+        window.innerWidth / 2,
+        window.innerHeight / 2
+    );
 
-      // Create a little heart burst
-      for (let i = 0; i < 12; i++) {
+    if (revealedLines < birthdayLines.length) {
+
+        nextBtn.textContent = "One more thing... 💌";
+
+    } else {
+
+        nextBtn.textContent = "Read it again 💗";
+
+        // Show the ending after the last line
+        setTimeout(() => {
+            finalMessage.classList.add("visible");
+        }, 500);
+    }
+}
+
+nextBtn.addEventListener("click", revealNextLine);
+
+
+/* ==========================================
+   HEART BURST ANIMATION
+========================================== */
+
+function createHeartBurst(x, y) {
+
+    const burstEmojis = ["💗", "💖", "💕", "✨", "💝", "🐧"];
+
+    for (let i = 0; i < 12; i++) {
+
         const heart = document.createElement("span");
 
-        heart.className = "floaty";
-        heart.textContent = ["💗", "💖", "💕", "✨"][i % 4];
+        heart.className = "burst-heart";
 
-        heart.style.left = (35 + Math.random() * 30) + "vw";
-        heart.style.bottom = "45%";
+        heart.textContent =
+            burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
 
-        heart.style.setProperty("--left", "0px");
-        heart.style.setProperty("--size", "24px");
-        heart.style.setProperty("--duration", "2s");
-        heart.style.setProperty("--delay", "0s");
+        heart.style.left = x + "px";
+        heart.style.top = y + "px";
 
-        layer.appendChild(heart);
+        heart.style.setProperty(
+            "--x",
+            (Math.random() - 0.5) * 260 + "px"
+        );
+
+        heart.style.setProperty(
+            "--y",
+            (Math.random() - 0.5) * 240 + "px"
+        );
+
+        document.body.appendChild(heart);
 
         setTimeout(() => {
-          heart.remove();
-        }, 2200);
-      }
-    });
-  </script>
+            heart.remove();
+        }, 1000);
+    }
+}
+</script>
 
 </body>
 </html>
+```
