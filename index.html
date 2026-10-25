@@ -14,8 +14,7 @@
     }
 
     :root {
-      --pink: #ff75a8;
-      --dark-pink: #ed4382;
+      --pink: #ed4382;
       --text: #75435a;
     }
 
@@ -43,51 +42,53 @@
       display: none !important;
     }
 
-    /* =================================
-       CONTINUOUS BOTTOM-TO-TOP FLOATING
-    ================================= */
+    /* ======================================
+       CONTINUOUS TOP-TO-BOTTOM DECORATIONS
+       These stay OUTSIDE the message card.
+    ====================================== */
 
     #floatingLayer {
       position: fixed;
       inset: 0;
       overflow: hidden;
       pointer-events: none;
-      z-index: 1;
+      z-index: 3;
       contain: layout paint;
     }
 
     .float-item {
       position: absolute;
-      bottom: -100px;
+      top: -70px;
       left: var(--left);
       font-size: var(--size);
       opacity: 0;
-      will-change: transform, opacity;
-      animation: floatUp var(--duration) linear var(--delay) infinite;
-      filter: drop-shadow(0 3px 5px rgba(190, 70, 120, 0.12));
       user-select: none;
+      will-change: transform, opacity;
+
+      animation:
+        fallDown var(--duration) linear var(--delay) infinite;
     }
 
-    @keyframes floatUp {
+    @keyframes fallDown {
       0% {
-        transform: translate3d(0, 0, 0) rotate(-12deg);
+        transform: translate3d(0, -10vh, 0) rotate(0deg);
         opacity: 0;
       }
 
       8% {
-        opacity: 0.85;
+        opacity: 0.8;
       }
 
       25% {
-        transform: translate3d(18px, -25vh, 0) rotate(8deg);
+        transform: translate3d(18px, 25vh, 0) rotate(15deg);
       }
 
       50% {
-        transform: translate3d(-14px, -50vh, 0) rotate(-8deg);
+        transform: translate3d(-16px, 50vh, 0) rotate(-12deg);
       }
 
       75% {
-        transform: translate3d(18px, -75vh, 0) rotate(12deg);
+        transform: translate3d(18px, 75vh, 0) rotate(15deg);
       }
 
       92% {
@@ -95,14 +96,14 @@
       }
 
       100% {
-        transform: translate3d(-10px, -115vh, 0) rotate(-12deg);
+        transform: translate3d(-10px, 115vh, 0) rotate(-15deg);
         opacity: 0;
       }
     }
 
-    /* =================================
+    /* ======================================
        SCREENS
-    ================================= */
+    ====================================== */
 
     .screen {
       position: relative;
@@ -114,16 +115,18 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
       padding:
         max(24px, env(safe-area-inset-top))
         14px
         max(24px, env(safe-area-inset-bottom));
+
       isolation: isolate;
     }
 
-    /* =================================
-       DOOR SCREEN
-    ================================= */
+    /* ======================================
+       FIRST SCREEN: DOUBLE DOORS
+    ====================================== */
 
     #doorScreen {
       background:
@@ -139,7 +142,7 @@
 
     .door-heading h1 {
       color: #e64d87;
-      font-size: clamp(25px, 7vw, 43px);
+      font-size: clamp(26px, 7vw, 43px);
       line-height: 1.2;
       margin-bottom: 10px;
       text-shadow: 2px 3px 0 rgba(255,255,255,.8);
@@ -183,7 +186,6 @@
       cursor: pointer;
       overflow: hidden;
       z-index: 2;
-      -webkit-tap-highlight-color: transparent;
     }
 
     .door::before {
@@ -254,10 +256,12 @@
       transform: rotateY(115deg);
     }
 
+    /* ALL INSTRUCTIONS ARE BLACK */
+
     .door-hint {
       margin-top: 30px;
       text-align: center;
-      color: #bd477b;
+      color: #000;
       font-size: clamp(14px, 4vw, 17px);
       font-weight: bold;
       line-height: 1.5;
@@ -289,20 +293,19 @@
       transform: scale(.96);
     }
 
-    /* =================================
-       MESSAGE SCREEN
-    ================================= */
+    /* ======================================
+       SECOND SCREEN: BIRTHDAY CARD
+    ====================================== */
 
     #messageScreen {
       background:
         radial-gradient(circle at 15% 15%, rgba(255,255,255,.7), transparent 30%),
         linear-gradient(135deg, #ffe0ec, #fff2f7, #f5ddff);
-      justify-content: center;
     }
 
     .message-title {
       text-align: center;
-      font-size: clamp(24px, 6vw, 38px);
+      font-size: clamp(25px, 6vw, 38px);
       line-height: 1.25;
       color: #e64d87;
       margin-bottom: 22px;
@@ -311,16 +314,19 @@
 
     .message-card {
       position: relative;
+      z-index: 2;
       width: fit-content;
       max-width: 100%;
       min-width: 0;
       padding: clamp(20px, 5vw, 30px);
       border-radius: 26px;
-      background: rgba(255,255,255,.96);
+      background: rgba(255,255,255,.97);
       border: 3px solid #ffc0d9;
+
       box-shadow:
         0 15px 45px rgba(210,91,145,.18),
         inset 0 0 0 4px rgba(255,227,239,.6);
+
       text-align: center;
       animation: cardAppear .7s ease both;
     }
@@ -337,8 +343,10 @@
       margin-bottom: 18px;
     }
 
+    /* HINTS AND INSTRUCTIONS: BLACK */
+
     .tap-hint {
-      color: #df548d;
+      color: #000;
       font-size: clamp(13px, 3.6vw, 16px);
       font-weight: bold;
       line-height: 1.5;
@@ -347,25 +355,30 @@
       animation: pulse 2s infinite;
     }
 
+    /* ======================================
+       MAIN FOUR LINES: LARGE AND COLORFUL
+    ====================================== */
+
     #birthdayMessages {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
-      margin: 10px 0 22px;
+      gap: 18px;
+      margin: 14px 0 25px;
       width: 100%;
     }
 
     .message-line {
       display: block;
-      max-width: 100%;
       width: max-content;
+      max-width: 100%;
       white-space: nowrap;
-      font-size: clamp(12px, 3.3vw, 25px);
-      font-weight: bold;
+      font-size: clamp(15px, 4.4vw, 27px);
+      font-weight: 900;
       line-height: 1.5;
-      overflow-wrap: normal;
+      letter-spacing: -.3px;
       word-break: keep-all;
+
       opacity: 0;
       transform: translateY(10px) scale(.96);
       animation: lineReveal .55s ease forwards;
@@ -387,33 +400,40 @@
       color: #c33f89;
     }
 
+    /* NEXT BUTTON */
+
     .next-button {
-      width: auto;
       max-width: 100%;
       margin-top: 4px;
     }
 
-    /* =================================
-       FINAL MESSAGE
-    ================================= */
+    /* ======================================
+       FINAL BIRTHDAY MESSAGE: DIFFERENT COLOR
+    ====================================== */
 
     .final-message {
-      margin-top: 20px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 2px dashed #ffc0d9;
       animation: fadeInUp .7s ease both;
     }
 
     .final-hug {
-      font-size: 55px;
-      margin-bottom: 10px;
+      font-size: 52px;
+      margin-bottom: 12px;
       animation: pulse 2s infinite;
     }
 
     .final-message p {
-      color: #d74785;
-      font-size: clamp(14px, 3.8vw, 19px);
+      color: #278a70;
+      font-size: clamp(15px, 4vw, 20px);
       font-weight: bold;
       line-height: 1.8;
     }
+
+    /* ======================================
+       RESTART BUTTONS
+    ====================================== */
 
     .restart-buttons {
       display: flex;
@@ -451,9 +471,9 @@
       border: 2px solid #ffc0d9;
     }
 
-    /* =================================
+    /* ======================================
        HEART BURST
-    ================================= */
+    ====================================== */
 
     .heart-burst {
       position: fixed;
@@ -475,9 +495,9 @@
       }
     }
 
-    /* =================================
+    /* ======================================
        ANIMATIONS
-    ================================= */
+    ====================================== */
 
     @keyframes fadeInUp {
       from {
@@ -516,13 +536,13 @@
       }
 
       50% {
-        transform: scale(1.035);
+        transform: scale(1.025);
       }
     }
 
-    /* =================================
+    /* ======================================
        PHONE OPTIMIZATION
-    ================================= */
+    ====================================== */
 
     @media (max-width: 430px) {
       .screen {
@@ -547,9 +567,15 @@
         border-radius: 22px;
       }
 
+      /* Keep each message line together while fitting phones. */
+
       .message-line {
-        font-size: clamp(10px, 3.05vw, 13px);
-        letter-spacing: -.25px;
+        font-size: clamp(11px, 3.35vw, 15px);
+        letter-spacing: -.4px;
+      }
+
+      #birthdayMessages {
+        gap: 14px;
       }
 
       .message-subtitle {
@@ -558,11 +584,6 @@
 
       .tap-hint {
         font-size: 13px;
-        padding: 0 2px;
-      }
-
-      #birthdayMessages {
-        gap: 12px;
       }
 
       .next-button {
@@ -571,11 +592,19 @@
         font-size: 14px;
       }
 
-      .decor-1,
-      .decor-2,
-      .decor-3,
-      .decor-4 {
-        font-size: 23px;
+      .float-item {
+        opacity: .72;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .message-card {
+        padding: 20px 7px;
+      }
+
+      .message-line {
+        font-size: 10.5px;
+        letter-spacing: -.45px;
       }
     }
 
@@ -621,12 +650,14 @@
 
 <body>
 
-  <!-- Continuously floating decorations -->
+  <!-- Flowers, chocolates, hearts and penguins flow over the page,
+       but remain behind the message card. -->
   <div id="floatingLayer" aria-hidden="true"></div>
 
-  <!-- =================================
+
+  <!-- ======================================
        SCREEN 1: DOUBLE DOORS
-  ================================== -->
+  ====================================== -->
 
   <section id="doorScreen" class="screen">
 
@@ -660,9 +691,9 @@
   </section>
 
 
-  <!-- =================================
+  <!-- ======================================
        SCREEN 2: BIRTHDAY MESSAGES
-  ================================== -->
+  ====================================== -->
 
   <section id="messageScreen" class="screen hidden">
 
@@ -716,40 +747,43 @@
 
 
   <script>
-    /* =================================
-       FLOATING DECORATIONS
-    ================================== */
+    /* ======================================
+       CONTINUOUS FALLING DECORATIONS
+    ====================================== */
 
     const floatingLayer = document.getElementById("floatingLayer");
 
     const floatingEmojis = [
-      "🐧", "💗", "💕", "💖", "🍫",
-      "💝", "✨", "🤍", "🐧", "💞"
+      "🌸", "🌷", "🌹", "🌺", "💐",
+      "💗", "💕", "💖", "💝", "❤️",
+      "🍫", "🍬", "🍭", "🐧", "✨"
     ];
 
     function createFloatingDecorations() {
       floatingLayer.innerHTML = "";
 
-      // Create staggered decorations for an immediate,
-      // continuous bottom-to-top floating effect.
-      const itemCount = window.innerWidth <= 430 ? 13 : 18;
+      const isPhone = window.innerWidth <= 430;
+      const itemCount = isPhone ? 16 : 24;
 
       for (let i = 0; i < itemCount; i++) {
         const item = document.createElement("span");
 
         item.className = "float-item";
+
         item.textContent =
-          floatingEmojis[Math.floor(Math.random() * floatingEmojis.length)];
+          floatingEmojis[
+            Math.floor(Math.random() * floatingEmojis.length)
+          ];
 
         const left = Math.random() * 96;
-        const size = window.innerWidth <= 430
-          ? 18 + Math.random() * 12
-          : 20 + Math.random() * 16;
+        const size = isPhone
+          ? 17 + Math.random() * 12
+          : 20 + Math.random() * 17;
 
-        const duration = 9 + Math.random() * 10;
+        const duration = 8 + Math.random() * 9;
 
-        // Negative delays spread decorations across the animation,
-        // so they don't all begin at the bottom at the same time.
+        // Stagger the starting points so decorations are already
+        // flowing across the screen when the page opens.
         const delay = -(Math.random() * duration);
 
         item.style.setProperty("--left", `${left}%`);
@@ -764,9 +798,9 @@
     createFloatingDecorations();
 
 
-    /* =================================
+    /* ======================================
        ELEMENT REFERENCES
-    ================================== */
+    ====================================== */
 
     const doorScreen = document.getElementById("doorScreen");
     const messageScreen = document.getElementById("messageScreen");
@@ -789,9 +823,9 @@
     const startOverBtn = document.getElementById("startOverBtn");
 
 
-    /* =================================
-       BIRTHDAY LINES
-    ================================== */
+    /* ======================================
+       FOUR MAIN BIRTHDAY LINES
+    ====================================== */
 
     const birthdayLines = [
       {
@@ -813,9 +847,9 @@
     ];
 
 
-    /* =================================
-       CUTE HINTS
-    ================================== */
+    /* ======================================
+       HINTS: ALL BLACK
+    ====================================== */
 
     const hintMessages = [
       "Psst, baby! Tap here for your first surprise line 🥹💖",
@@ -825,9 +859,9 @@
     ];
 
 
-    /* =================================
+    /* ======================================
        DOOR OPENING
-    ================================== */
+    ====================================== */
 
     let doorsOpened = false;
 
@@ -837,7 +871,8 @@
       doorsOpened = true;
       doorFrame.classList.add("open");
 
-      doorHint.textContent = "Yayyy! Your surprise is waiting inside 💗";
+      doorHint.textContent =
+        "Yayyy, baby! Your surprise is waiting inside 💗";
 
       setTimeout(() => {
         enterBtn.classList.remove("hidden");
@@ -862,9 +897,9 @@
     });
 
 
-    /* =================================
-       REVEAL LINES ONE BY ONE
-    ================================== */
+    /* ======================================
+       REVEAL BIRTHDAY LINES ONE BY ONE
+    ====================================== */
 
     let currentLineIndex = 0;
 
@@ -874,6 +909,7 @@
       const line = birthdayLines[currentLineIndex];
 
       const messageElement = document.createElement("div");
+
       messageElement.className = `message-line ${line.className}`;
       messageElement.textContent = line.text;
 
@@ -914,9 +950,9 @@
     nextBtn.addEventListener("click", showNextLine);
 
 
-    /* =================================
+    /* ======================================
        RESET MESSAGE SCREEN
-    ================================== */
+    ====================================== */
 
     function resetMessages() {
       currentLineIndex = 0;
@@ -932,9 +968,9 @@
     }
 
 
-    /* =================================
-       READ AGAIN
-    ================================== */
+    /* ======================================
+       READ THE MESSAGE AGAIN
+    ====================================== */
 
     readAgainBtn.addEventListener("click", () => {
       resetMessages();
@@ -943,9 +979,9 @@
     });
 
 
-    /* =================================
+    /* ======================================
        START THE SURPRISE AGAIN
-    ================================== */
+    ====================================== */
 
     startOverBtn.addEventListener("click", () => {
       resetMessages();
@@ -965,9 +1001,9 @@
     });
 
 
-    /* =================================
+    /* ======================================
        HEART BURST EFFECT
-    ================================== */
+    ====================================== */
 
     function createHeartBurst(x, y) {
       const hearts = ["💗", "💕", "💖", "💘", "✨"];
@@ -976,11 +1012,16 @@
         const heart = document.createElement("span");
 
         heart.className = "heart-burst";
+
         heart.textContent =
           hearts[Math.floor(Math.random() * hearts.length)];
 
-        heart.style.left = `${x + (Math.random() * 70 - 35)}px`;
-        heart.style.top = `${y + (Math.random() * 30 - 15)}px`;
+        heart.style.left =
+          `${x + (Math.random() * 70 - 35)}px`;
+
+        heart.style.top =
+          `${y + (Math.random() * 30 - 15)}px`;
+
         heart.style.animationDelay = `${Math.random() * .2}s`;
 
         document.body.appendChild(heart);
